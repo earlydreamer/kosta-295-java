@@ -19,6 +19,8 @@ import com.chapter05.view.View;
 
 public class ScoreManager {
 	
+	
+	
 	//View view = View.getInstance(); //View 객체는 Static 메소드만 들고 있으므로 싱글턴으로 만들어도 의미가 없다...
 	//싱글턴으로 만들려면 이 ScoreManager 로직이 싱글턴화가 되어야했는데 이거 고치기엔 시간이 없었음
 	
@@ -166,9 +168,8 @@ public class ScoreManager {
 	
 	/**
 	 * 메뉴 화면 로직<br>
-	 * 리팩토링 필요
-	 * View가 아니라 Controller 내부의 별도 메소드로 분리한다
 	 * View는 뿌려주기만 하고, 입력을 받고 결과를 반한하는 것은 컨트롤러에게 책임이 있다
+	 * 컨트롤러 내부에서 루프를 돌고 UI출력과 인풋 로직은 View를 호출해서 처리한다.
 	 */
 	public void InputMenuLogic() {
 		boolean isRunning = true;
@@ -178,27 +179,12 @@ public class ScoreManager {
 			input = scanner.nextInt();
 			switch (input) {
 			case 1: //배열 크기 변경
-				View.printInputCount();
-				clearStudentArr(scanner.nextInt());
+				int count = View.InputCount();
+				clearStudentArr(count);
 				break;
 
 			case 2: //학생 입력
-				int stdNumber;
-				String name;
-				double kor, mat, eng;
-				
-				View.printInputStdNumber();
-				stdNumber = scanner.nextInt();
-				View.printInputName();
-				name = scanner.next();
-				View.printInputKor();
-				kor = scanner.nextDouble();
-				View.printInputMat();
-				mat = scanner.nextDouble();
-				View.printInputEng();
-				eng = scanner.nextDouble();
-				StudentDto student = newStudent(stdNumber, name, kor, mat, eng);
-				View.printResult(setNewStudent(student));
+				makeStudent();
 				break;
 
 			case 3: //전체 학생 정보 출력
@@ -208,18 +194,7 @@ public class ScoreManager {
 				break;
 
 			case 4: //최대 평균점수 및 전체 평균 출력
-				double maxAvg = 0;
-				double total = 0;
-				String maxAvgName = null;
-
-				for (int i = 0; i < MAX_STUDENT; i++) {
-					if (students[i].getAvgScore() > maxAvg) {
-						maxAvg = students[i].getAvgScore();
-						maxAvgName = students[i].getStudentName();
-					}
-					total += students[i].getAvgScore();
-				}
-				View.printScoreAnalysis(maxAvgName, maxAvg, total);
+				calcMaxScore();
 				break;
 
 			case 5: //종료
@@ -232,6 +207,41 @@ public class ScoreManager {
 
 			}
 		}
+	}
+	
+	/**
+	 * View의 인풋UI를 호출해서 리턴값을 받아 학생 객체를 생성한다.
+	 */
+	private void makeStudent() { //클래스 내 로직에서 호출하므로 private로 선언해도 호출에 문제없다
+		int stdNumber;
+		String name;
+		double kor, mat, eng;
+		stdNumber = View.inputStdNumber();
+		name = View.inputName();
+		kor = View.inputKor();
+		mat = View.inputMat();
+		eng = View.inputEng();
+		StudentDto student = newStudent(stdNumber, name, kor, mat, eng);
+		View.printResult(setNewStudent(student));
+	}
+	
+	/**
+	 * 들고있는 students 배열 전체를 순회하며 가장 높은 평균점수와 전체평균을 산출한다.
+	 */
+	private void calcMaxScore() { //클래스 내 로직에서 호출하므로 private로 선언해도 호출에 문제없다
+		double maxAvg = 0;
+		double total = 0;
+		String maxAvgName = null;
+
+		for (int i = 0; i < STUDENT_COUNT; i++) { //학생 수만큼 루프를 돈다. 배열 전체를 순회하지 않으므로 enhanced for를 사용하지 않는다
+			if (students[i].getAvgScore() > maxAvg) {
+				maxAvg = students[i].getAvgScore();
+				maxAvgName = students[i].getStudentName();
+			}
+			total += students[i].getAvgScore();
+		}
+		View.printScoreAnalysis(maxAvgName, maxAvg, total);
+		
 	}
 	
 	

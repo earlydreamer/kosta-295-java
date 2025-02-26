@@ -21,11 +21,9 @@ import com.chapter05.dto.StudentDto;
 
 public class View {
 	
-	
-	
 	private static View view = new View();	
 	private View() {
-		
+
 	}
 	
 	/**
@@ -37,7 +35,7 @@ public class View {
 	}
 	
 	
-	Scanner scanner = new Scanner(System.in);
+	static Scanner scanner = new Scanner(System.in);
 	public static void printMenu() {
 		System.out.println("-------------- 학생성적관리프로그램 ----------------");
 		System.out.println("1. 학생수 2. 점수입력 3. 점수리스트 4. 분석 5. 종료");
@@ -51,31 +49,40 @@ public class View {
 	 */
 	
 	//변수명이 print어쩌구저쩌구로 너무 길다 싶으면 print 부분을 자르고 나중에 접근할때 명시적으로 view.inputCount() 식으로 접근해도 될 듯함
-	public static void printInputCount() { 
+	public static int InputCount() { 
 		System.out.print("학생 수를 입력하세요 > ");
+		int input = scanner.nextInt();
+		return input;
 	}
 
-	public static void printInputStdNumber() {
+	public static int inputStdNumber() {
 		System.out.print("학번을 입력하세요 > ");
+		int input = scanner.nextInt();
+		return input;
 	}
 	
-	public static void printInputName() {
+	public static String inputName() {
 		System.out.print("이름을 입력하세요 > ");
-		
+		String input = scanner.next();
+		return input;		
 	}
 	
-	public static void printInputKor() {
+	public static double inputKor() {
 		System.out.print("국어점수를 입력하세요 > ");
-		
+		double input = scanner.nextDouble();
+		return input;		
 	}
 	
-	public static void printInputMat() {	
+	public static double inputMat() {	
 		System.out.print("수학점수를 입력하세요 > ");
+		double input = scanner.nextDouble();
+		return input;
 	}
 	
-	public static void printInputEng() {
+	public static double inputEng() {
 		System.out.print("영어점수를 입력하세요 > ");
-		
+		double input = scanner.nextDouble();
+		return input;
 	}
 	
 	public static void printScore() {
@@ -83,6 +90,7 @@ public class View {
 	}
 	
 	public static void printPersonalScore(StudentDto student) {
+		//StudentDto 객체를 받아오는것은 괜찮다 이 매개변수는 뷰가 들고있는 것이 아니라 임시변수이므로 뷰가 모델을 알고있는 상황이 아니다
 		System.out.println("-------------------------");
 		System.out.println(" 학생 이름	: "+student.getStudentName());
 		System.out.println(" 국어 점수	: "+student.getKorScore());
