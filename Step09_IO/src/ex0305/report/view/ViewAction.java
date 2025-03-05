@@ -5,9 +5,9 @@ public interface ViewAction {
 
 	void mainPrint();
 	void inputPrint();
-	void nameInPrint();
-	void weightInPrint();
-	void passInPrint();
+	void nameInputPrint();
+	void weightInputPrint();
+	void passwordInputPrint();
 	void profilePrint(Profile profile);
 	
 }

@@ -10,7 +10,6 @@ public class Profile {
 	/*
 	 * --------------------------------Getter-Setter ----------------------------------
 	 */
-
 	
 	public String getName() {
 		return name;

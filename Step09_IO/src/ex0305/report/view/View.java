@@ -6,37 +6,37 @@ public class View implements ViewAction{
 
 	@Override
 	public void mainPrint() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("-----------------------------------------------------------------");
+		System.out.println("    1. 프로필 저장    |    2. 프로필 불러오기    |    3. 종료    ");
+		System.out.println("-----------------------------------------------------------------");
 	}
 
 	@Override
 	public void inputPrint() {
-		// TODO Auto-generated method stub
+		System.out.println("메뉴를 선택하세요.");
+	}
+
+	@Override
+	public void nameInputPrint() {
+		System.out.print("이름 >");
 		
 	}
 
 	@Override
-	public void nameInPrint() {
-		// TODO Auto-generated method stub
+	public void weightInputPrint() {
+		System.out.print("몸무게 >");
 		
 	}
 
 	@Override
-	public void weightInPrint() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void passInPrint() {
-		// TODO Auto-generated method stub
+	public void passwordInputPrint() {
+		System.out.print("비밀번호 >");
 		
 	}
 
 	@Override
 	public void profilePrint(Profile profile) {
-		// TODO Auto-generated method stub
+		System.out.println(profile); 
 		
 	}
 	
