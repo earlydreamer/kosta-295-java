@@ -1,11 +1,16 @@
 package ex0305.report.model;
 
+
+/**
+ * 프로필 DTO
+ * @author 박재현
+ * 2025-03-06
+ */
 public class Profile {
 
 	private String name;
 	private double weight;
 	private String password;
-	
 	
 	/*
 	 * --------------------------------Getter-Setter ----------------------------------
@@ -40,8 +45,8 @@ public class Profile {
 		StringBuilder builder = new StringBuilder();
 		builder.append(name);
 		builder.append("님의 몸무게는 ");
-		builder.append(weight);
-		builder.append("이고 비밀번호는 ");
+		builder.append(Math.round(weight*10)/10.0); //소수점 1자리까지 표시한다.
+		builder.append("kg이고 비밀번호는 ");
 		builder.append(password);
 		builder.append("입니다.");
 		return builder.toString();

@@ -1,7 +1,11 @@
 package ex0305.report.view;
-
 import ex0305.report.model.Profile;
 
+/**
+ * View 메소드
+ * @author 박재현
+ * 2025-03-06
+ */
 public class View implements ViewAction{
 
 	@Override
@@ -35,10 +39,35 @@ public class View implements ViewAction{
 	}
 
 	@Override
-	public void profilePrint(Profile profile) {
-		System.out.println(profile); 
+	public void profilePrint(Profile profile) {	
+		System.out.println(profile); 		
+	}
+
+	@Override
+	public void exitPrint() {
+		System.out.println("종료합니다.");
 		
 	}
+
+	
+	
+	@Override
+	public void exceptionMessagePrint(String message) {
+		System.out.println(message);
+		
+	}
+
+	@Override
+	public void wrongInputPrint() {
+		System.out.println("잘못된 입력입니다.");
+		
+	}
+
+	@Override
+	public void writeSuccessPrint() {
+		System.out.println("프로필 저장에 성공했습니다.");
+	}
+	
 	
 	
 
