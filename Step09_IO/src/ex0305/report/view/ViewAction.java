@@ -20,4 +20,8 @@ public interface ViewAction {
 	void exceptionMessagePrint(String message);
 	void writeSuccessPrint();
 	void wrongInputPrint();
+	void wrongPasswordPrint();
+	void checkPasswordPrint();
+	void changeWeightPrint();
+	
 }

@@ -15,6 +15,8 @@ import ex0305.report.view.View;
  * @author 박재현
  * 2025-03-06
  */
+//TODO : 추가된 메소드 Override해서 작성
+//TODO : 추가된 기능 메뉴 로직에 추가
 public class Controller implements ControllerAction {
 
 	View view = new View();
@@ -33,8 +35,8 @@ public class Controller implements ControllerAction {
 				view.mainPrint();
 				menuSelect = inputMenu();
 				switch (menuSelect) {
-				case 1 -> stream.setOutputStream(newProfile());
-				case 2 -> view.profilePrint(loadProfile());
+//				case 1 -> stream.setOutputStream(newProfile()); //TODO : 변경된 CRUD 로직 타도록 변경, 메소드 분리해서 분리된 메소드 안에서 호출하고 해당 메소드에서 결과에 따른 성공 View 호출하도록
+				case 2 -> view.profilePrint(loadProfile()); //TODO : 메소드 분리해서 분리된 메소드 안에서 호출하도록
 				case 3 -> isRunning = exit();
 				default -> wrongInput();
 				}
@@ -97,6 +99,7 @@ public class Controller implements ControllerAction {
 		String inputString = inputName();
 		try {
 			returnProfile = stream.getFromInputStream(inputString);
+			
 		} catch (IOException e) {
 			throw e; //받은 예외를 그대로 다시 던진다
 		}
@@ -122,6 +125,24 @@ public class Controller implements ControllerAction {
 
 	public Controller() {
 		menuLogic();
+	}
+
+	@Override
+	public Profile searchWeight() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double updateWeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Profile updateProfile() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

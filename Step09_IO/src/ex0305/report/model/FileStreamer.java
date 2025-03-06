@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
  * 2025-03-06
  */
 
+//TODO : 파일 입출력 부분 Serialize 방식으로 다시 작성
 public class FileStreamer implements StreamAction {
 
 	// 기본 경로를 static final로 선언

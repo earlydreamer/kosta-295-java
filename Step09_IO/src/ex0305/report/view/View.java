@@ -6,6 +6,7 @@ import ex0305.report.model.Profile;
  * @author 박재현
  * 2025-03-06
  */
+
 public class View implements ViewAction{
 
 	@Override
@@ -66,6 +67,24 @@ public class View implements ViewAction{
 	@Override
 	public void writeSuccessPrint() {
 		System.out.println("프로필 저장에 성공했습니다.");
+	}
+
+	@Override
+	public void wrongPasswordPrint() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void checkPasswordPrint() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void changeWeightPrint() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

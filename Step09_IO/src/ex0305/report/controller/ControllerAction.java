@@ -57,4 +57,25 @@ public interface ControllerAction {
 	 * 잘못된 입력이 들어왔을 경우의 View를 표시하는 메소드
 	 */
 	void wrongInput();
+	
+	/**
+	 * 입력한 사람의 몸무게를 검색해 리턴하는 메소드
+	 * @return
+	 */
+	Profile searchWeight();
+	
+	/**
+	 * 몸무게를 수정하는 메소드
+	 * @return (double) 수정된 몸무게
+	 */
+	double updateWeight();
+	
+	
+	/**
+	 * 프로필을 수정하는 메소드
+	 * @return (Profile) 프로필 DTO
+	 */
+	Profile updateProfile();
+	
+	
 }

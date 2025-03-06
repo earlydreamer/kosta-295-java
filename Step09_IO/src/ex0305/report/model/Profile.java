@@ -6,6 +6,8 @@ package ex0305.report.model;
  * @author 박재현
  * 2025-03-06
  */
+
+//TODO : Serializable 방식에 대응하도록 수정
 public class Profile {
 
 	private String name;
