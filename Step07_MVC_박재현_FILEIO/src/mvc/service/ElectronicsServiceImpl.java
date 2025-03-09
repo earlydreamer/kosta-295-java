@@ -12,7 +12,7 @@ import mvc.exception.ElectronicsArrayBoundsException;
 import mvc.exception.FileIoFailException;
 import mvc.exception.SearchNotFoundException;
 import mvc.dao.FileStreamDao;
-import mvc.dao.StreamImpl;
+import mvc.dao.FileStreamDaoImpl;
 
 /**
  * 전자제품에 관련된 기능을 담당할 클래스
@@ -31,7 +31,7 @@ public class ElectronicsServiceImpl implements ElectronicsService {
 	 * 외부에서 객체 생성안됨.
 	 */
 	private ElectronicsServiceImpl() {
-		dao = StreamImpl.getInstance();	
+		dao = FileStreamDaoImpl.getInstance();	
 	}
 	
 	/**

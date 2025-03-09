@@ -22,10 +22,10 @@ import mvc.exception.SearchNotFoundException;
  * 기능을 이쪽에서 1차적으로 수행하고 리턴한다.
  */
 
-public class StreamImpl implements FileStreamDao {
+public class FileStreamDaoImpl implements FileStreamDao {
 	// 구현체에 Impl을 붙이는 컨벤션이니까 네이밍 규칙 맞춰서 통일...
 
-	private static StreamImpl instance; //Singleton 패턴으로 수정
+	private static FileStreamDaoImpl instance; //Singleton 패턴으로 수정
 	
 	
 	private static String FILE_NAME; 
@@ -45,13 +45,13 @@ public class StreamImpl implements FileStreamDao {
 	/*
 	 * -------------------------Constructor ----------------------------
 	 */
-	private StreamImpl() { //디폴트 생성자를 이용한 경로 세팅
+	private FileStreamDaoImpl() { //디폴트 생성자를 이용한 경로 세팅
 		FILE_NAME = "electronics.txt"; 
 		PATH = "src/mvc/dao/" + FILE_NAME;
 		init();
 	}
 
-	private StreamImpl(String filename, String path) {
+	private FileStreamDaoImpl(String filename, String path) {
 		//경로 텍스트를 의존성 주입을 통해 세팅하는 생성자
 		FILE_NAME = filename;
 		PATH = path + filename;
@@ -59,9 +59,9 @@ public class StreamImpl implements FileStreamDao {
 	}
 	
 	
-	public static StreamImpl getInstance() {
+	public static FileStreamDaoImpl getInstance() {
 		if(instance==null)
-				instance = new StreamImpl();			
+				instance = new FileStreamDaoImpl();			
 		return instance;
 		
 	}
@@ -72,18 +72,15 @@ public class StreamImpl implements FileStreamDao {
 
 	@Override
 	public void saveAllElectronics(ArrayList<Electronics> electronicsList) throws FileIoFailException {
-		// TODO Auto-generated method stub
 		try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(PATH)))) {
 			oos.writeObject(electronicsList);
 		} catch (IOException e) {
 			throw new FileIoFailException("파일 처리 과정에서 오류가 발생했습니다.");
 		}
-
 	}
 
 	@Override
 	public ArrayList<Electronics> loadAllElectronics() throws FileIoFailException {
-		// TODO Auto-generated method stub
 		ArrayList<Electronics> electronicsList = null;
 		try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(PATH)))) {
 			electronicsList = (ArrayList<Electronics>) ois.readObject();
