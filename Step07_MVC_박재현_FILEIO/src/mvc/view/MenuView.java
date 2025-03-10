@@ -13,7 +13,6 @@ import mvc.exception.WrongInputException;
 public class MenuView {
 	Scanner sc = new Scanner(System.in);
 
-
 	/**
 	 * 전체 메뉴를 출력하는 메소드
 	 */
