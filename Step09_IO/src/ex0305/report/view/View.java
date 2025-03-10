@@ -49,6 +49,7 @@ public class View implements ViewAction{
 		System.out.println("종료합니다.");
 		
 	}
+
 	
 	
 	@Override
@@ -70,24 +71,20 @@ public class View implements ViewAction{
 
 	@Override
 	public void wrongPasswordPrint() {
-		System.out.println("잘못된 패스워드를 입력하셨습니다.");
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void checkPasswordPrint() {
-		System.out.println("비밀번호를 확인합니다.");
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void changeWeightPrint() {
-		System.out.println("몸무게를 변경합니다.");		
-	}
-
-	@Override
-	public void writeSuccessPrint(Profile profile) {
-		System.out.println(profile.getName()+"님의 프로필 저장에 성공했습니다.");
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

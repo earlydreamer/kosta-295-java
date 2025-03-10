@@ -2,7 +2,6 @@ package ex0305.report.controller;
 
 import java.io.IOException;
 
-import ex0305.report.exception.FileIoFailException;
 import ex0305.report.model.Profile;
 
 /**
@@ -25,9 +24,8 @@ public interface ControllerAction {
 	/**
 	 * 프로필 입력 메소드 3개를 호출한 뒤 해당 값으로 새 프로필을 생성하는 메소드
 	 * @return (Profile) 생성된 프로필을 반환
-	 * @throws FileIoFailException 
 	 */
-	Profile newProfile() throws FileIoFailException;
+	Profile newProfile();
 	
 	/**
 	 * 이름을 입력받아 리턴하는 메소드

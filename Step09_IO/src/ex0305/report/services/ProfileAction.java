@@ -1,6 +1,5 @@
 package ex0305.report.services;
 
-import ex0305.report.exception.FileIoFailException;
 import ex0305.report.model.Profile;
 
 /**
@@ -18,10 +17,9 @@ public interface ProfileAction {
 	 * @param weight
 	 * @param password
 	 * @return (Profile) 생성된 프로필 DTO
-	 * @throws FileIoFailException 
 	 */
 	
-	Profile newProfile(String name, double weight, String password) throws FileIoFailException;
+	Profile newProfile(String name, double weight, String password);
 	
 	
 	
