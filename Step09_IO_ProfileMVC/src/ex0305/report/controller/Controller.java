@@ -1,12 +1,14 @@
 package ex0305.report.controller;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 import ex0305.report.controller.io.InputHandler;
+import ex0305.report.exception.DuplicatedNameException;
 import ex0305.report.exception.FileIoFailException;
+import ex0305.report.exception.LockedAccountException;
 import ex0305.report.exception.ProfileNotFoundException;
+import ex0305.report.exception.WrongInputException;
 import ex0305.report.exception.WrongPasswordException;
 import ex0305.report.model.ProfileDao;
 import ex0305.report.model.Profile;
@@ -16,10 +18,10 @@ import ex0305.report.view.View;
 /**
  * 컨트롤러 클래스
  * 
- * @author 박재현 2025-03-06
+ * @author 박재현 
+ * 2025-03-06
+ * 최종수정 2025-03-11
  */
-//TODO : 추가된 메소드 Override해서 작성
-//TODO : 추가된 기능 메뉴 로직에 추가
 public class Controller implements ControllerAction {
 
 	/*
@@ -31,30 +33,27 @@ public class Controller implements ControllerAction {
 	ProfileDao dao = null;
 	ProfileService profile = null;
 
-
 	/*
 	 * ------------------- Constructor -----------------------
 	 */
 
 	public Controller() {
-		init(); //테스트 용이성을 위해 생성자 안에 직접 초기화 로직을 넣는것보단 별도의 메소드로 분리하는 것이 낫다...
+		init(); // 테스트 용이성을 위해 생성자 안에 직접 초기화 로직을 넣는것보단 별도의 메소드로 분리한뒤 생성자 내에서 호출하는 것이 낫다...
 		menuLogic();
 	}
-	
-	
+
 	/*
 	 * ------------------- Init Method -----------------------
 	 */
-	
+
 	public void init() {
 		try {
-			this.view= new View();
+			this.view = new View();
 			this.input = new InputHandler();
 			this.dao = new ProfileDao();
 			this.profile = new ProfileService(this.dao);
 		} catch (FileIoFailException e) {
 			System.out.println(e.getMessage());
-//			e.printStackTrace();
 		}
 	}
 
@@ -62,7 +61,6 @@ public class Controller implements ControllerAction {
 	 * -------- Override Method -----------------------
 	 */
 
-	
 	@Override
 	public void menuLogic() {
 		// while loop를 돌면서 input을 대기하는 로직... 입력에 대한 응답의 주체가 Controller가 되도록
@@ -72,78 +70,103 @@ public class Controller implements ControllerAction {
 			try {
 				view.mainPrint();
 				menuSelect = inputMenu();
+
 				switch (menuSelect) {
-				case 1 -> view.writeSuccessPrint(newProfile()); 
-				case 2 -> view.profilePrint(searchProfileByName()); 
-				case 3 -> view.changeWeightPrint();
+				case 1 -> view.writeSuccessPrint(newProfile());
+				case 2 -> view.profilePrint(searchProfileByName());
+				case 3 -> view.changeWeightPrint(updateWeight());
 				case 4 -> view.deleteSuccessPrint(deleteProfile());
 				case 5 -> view.profilePrint(searchByWeight());
 				case 6 -> view.updateSuccessPrint(updatePassword());
+				case 7 -> view.unlockSuccessPrint(unlockAccount());
 				case 9 -> isRunning = exit();
-//				case 99 -> view.profilePrint(selectAllProfile()); //테스트용 임시 메소드. 요구되는 기능에는 없다
+				case 99 -> view.profilePrint(selectAllProfile()); // 테스트용 임시 기능. 저장된 모든 이름과 체중을 출력한다.
 
 				default -> wrongInput();
 				}
+
 			} catch (FileIoFailException e) {
-				// 저장과 불러오기 양쪽에서 오는 IOException에 대응
-				System.out.println(e.getMessage());// 예외 발생 메뉴 로직 루프 가장 바깥쪽에서 예외를 잡고 다시 루프를 돌린다
+				System.out.println(e.getMessage());
 			} catch (ProfileNotFoundException e) {
 				System.out.println(e.getMessage());
 			} catch (WrongPasswordException e) {
-				System.out.println(e.getMessage());}
+				System.out.println(e.getMessage());
+			} catch (DuplicatedNameException e) {
+				System.out.println(e.getMessage());
+			} catch (WrongInputException e) {
+				System.out.println(e.getMessage());
+			} catch (LockedAccountException e) {
+				System.out.println(e.getMessage());
+			}
 		} while (isRunning);
 
 	}
 
 	@Override
-	public int inputMenu() {
-		// TODO : 예외처리
-		view.inputPrint();
-		int returnInput = input.inputInt();
+	public int inputMenu() throws WrongInputException {
+		try {
+			view.inputPrint();
+			return input.inputInt();
+		} catch (Exception e) {
+			throw new WrongInputException("잘못된 입력입니다.");
+		}
+	}
 
-		return returnInput;
+	@Override
+	public Profile newProfile() throws FileIoFailException, DuplicatedNameException, WrongInputException {
+		try {
+			String name = inputName();
+			double weight = inputWeight();
+			String password = inputPassword();
+
+			return profile.createProfile(name, weight, password);
+		} catch (InputMismatchException | NumberFormatException | NullPointerException e) {
+			throw new WrongInputException("잘못된 입력입니다.");
+
+		}
+	}
+
+	@Override
+	public String inputName() throws WrongInputException {
+		try {
+			view.nameInputPrint();
+			String inputString = input.inputString();
+			return inputString;
+		} catch (Exception e) {
+			throw new WrongInputException("잘못된 입력입니다.");
+		}
+	}
+
+	@Override
+	public double inputWeight() throws WrongInputException {
+		try {
+			view.weightInputPrint();
+			double inputDouble = input.inputDouble();
+			return inputDouble;
+		} catch (Exception e) {
+			throw new WrongInputException("잘못된 입력입니다.");
+		}
 
 	}
 
 	@Override
-	public Profile newProfile() throws FileIoFailException {
-		// TODO : 예외처리
-		String name = inputName();
-		double weight = inputWeight();
-		String password = inputPassword();
-		
-		return profile.createProfile(name, weight, password);
+	public String inputPassword() throws WrongInputException {
+		try {
+			view.passwordInputPrint();
+			String inputString = input.inputString();
+			return inputString;
+		} catch (Exception e) {
+			throw new WrongInputException("잘못된 입력입니다.");
+		}
 	}
 
 	@Override
-	public String inputName() {
-		// TODO : 예외처리
-		view.nameInputPrint();
-		String inputString = input.inputString();
-		return inputString;
-	}
+	public Profile searchProfileByName() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException,
+			WrongInputException, LockedAccountException {
 
-	@Override
-	public double inputWeight() {
-		// TODO : 예외처리
-		view.weightInputPrint();
-		double inputDouble = input.inputDouble();
-		return inputDouble;
-	}
+		Profile returnProfile;
+		returnProfile = checkPassword();
 
-	@Override
-	public String inputPassword() {
-		// TODO : 예외처리
-		view.passwordInputPrint();
-		String inputString = input.inputString();
-		return inputString;
-	}
-	
-	@Override
-	public Profile searchProfileByName() throws FileIoFailException, ProfileNotFoundException {
-		Profile returnProfile = null;
-		String inputString = inputName();
-			returnProfile = dao.searchProfileByName(inputString);
 		return returnProfile;
 
 	}
@@ -159,7 +182,6 @@ public class Controller implements ControllerAction {
 		view.wrongInputPrint();
 	}
 
-
 	@Override
 	public ArrayList<Profile> searchByWeight() throws ProfileNotFoundException {
 		ArrayList<Profile> returnProfile;
@@ -170,49 +192,63 @@ public class Controller implements ControllerAction {
 	}
 
 	@Override
-	public double updateWeight() {
-		// TODO 비즈니스 로직 연결
-		return 0;
+	public Profile updateWeight() throws ProfileNotFoundException, FileIoFailException, WrongPasswordException,
+			WrongInputException, LockedAccountException {
+		Profile returnProfile = checkPassword();
+		returnProfile.setWeight(inputWeight());
+		return returnProfile;
+
 	}
 
 	@Override
-	public Profile updatePassword() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException {
+	public Profile checkPassword() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException,
+			WrongInputException, LockedAccountException {
 		view.checkPasswordPrint();
-		view.nameInputPrint();
-		String name = input.inputString();
-		view.passwordInputPrint();
-		String password = input.inputString();
-		return profile.checkPassword(name, password);
-		
-		
+		String name = inputName();
+		String password = inputPassword();
+		return profile.checkPassword(name, password);// 서비스 레이어로 입력받은 id와 비밀번호를 보낸 뒤 맞으면 프로필 객체를 리턴받는다.
 	}
 
+	@Override
+	public Profile updatePassword() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException,
+			WrongInputException, LockedAccountException {
+
+		Profile updateProfile = checkPassword(); // 비밀번호가 안 맞으면 checkPassword에서 발생한 Exception을 타고 나간다
+
+		if (updateProfile.isAccountLock())
+			updateProfile.setAccountLock(false); // 비밀번호가 맞으면 계정 잠금을 풀고 비밀번호 변경을 진행한다
+
+		view.updatePasswordPrint();
+		updateProfile.setPassword(inputPassword());
+		return profile.updateProfile(updateProfile); // 서비스 레이어로 업데이트 요청을 보내고 결과를 받아 리턴한다
+	}
 
 	@Override
 	public ArrayList<Profile> selectAllProfile() throws FileIoFailException {
 		return profile.selectAllProfile();
 	}
 
-
 	@Override
-	public String deleteProfile() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException {
-		// TODO 비즈니스 로직 연결
-		view.nameInputPrint();
-		String name = input.inputString();
-		view.passwordInputPrint();
-		String password = input.inputString();
-		return profile.deleteProfile(name, password);
+	public String deleteProfile() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException,
+			WrongInputException, LockedAccountException {
+
+		Profile deleteProfile = checkPassword();
+		return profile.deleteProfile(deleteProfile);
 	}
 
-
 	@Override
-	public Profile UpdatePassword(String name, String password) {
-		view.updatePasswordPrint();
-		view.nameInputPrint();
-		input.inputInt();
-		view.passwordInputPrint();
-		
-		return null;
+	public Profile unlockAccount() throws WrongInputException, ProfileNotFoundException, FileIoFailException {
+		view.unlockMessagePrint();
+		String name = inputName();
+		String password = inputPassword();
+
+		Profile returnProfile = profile.searchProfileByName(name);
+		if (password.equals(returnProfile.getPassword())) {			
+			returnProfile.setAccountLock(false);
+			returnProfile.setWrongPasswordCount(0);
+		}
+		profile.updateProfile(returnProfile);
+		return returnProfile;
 	}
 
 }

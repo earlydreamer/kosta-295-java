@@ -7,15 +7,16 @@ import ex0305.report.model.Profile;
  * View 메소드
  * @author 박재현
  * 2025-03-06
+ * 최종수정 2025-03-11
  */
 
 public class View implements ViewAction{
 
 	@Override
 	public void mainPrint() {
-		System.out.println("-------------------------------------------------------------------------------------------");
-		System.out.println(" 1. 프로필 저장 | 2. 이름 검색 | 3. 체중 변경 | 4. 프로필 삭제 | 5. 체중으로 검색 | 6. 비밀번호 변경| 9. 종료 ");
-		System.out.println("--------------------------------------------------------------------------------------------");
+		System.out.println("---------------------------------------------------------------------------------------------------------");
+		System.out.println(" 1. 프로필 저장 | 2. 이름 검색 | 3. 체중 변경 | 4. 프로필 삭제 | 5. 체중으로 검색 | 6. 비밀번호 변경| 7. 계정잠금 해제 | 9. 종료 ");
+		System.out.println("---------------------------------------------------------------------------------------------------------");
 	}
 
 	@Override
@@ -113,10 +114,21 @@ public class View implements ViewAction{
 	public void updateSuccessPrint(Profile profile) {
 		 System.out.println(profile.getName()+"님의 비밀번호 변경에 성공했습니다.");		
 	}
+
+	@Override
+	public void changeWeightPrint(Profile profile) {
+		System.out.println(profile.getName()+"님의 체중을 "+profile.getWeight()+"kg로 변경했습니다.");
+	}
 	
-	
-	
-	
-	
+	@Override
+	public void unlockSuccessPrint(Profile profile) {
+		System.out.println(profile.getName()+" 님 계정의 잠금을 해제했습니다.");
+	}
+
+	@Override
+	public void unlockMessagePrint() {
+		System.out.println("잠금을 해제합니다.");		
+	}
+
 
 }

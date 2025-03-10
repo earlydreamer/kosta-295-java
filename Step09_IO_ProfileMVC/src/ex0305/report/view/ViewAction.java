@@ -7,6 +7,7 @@ import ex0305.report.model.Profile;
  * View의 기능을 정의한 Interface
  * @author 박재현
  * 2025-03-06
+ * 최종수정 2025-03-11
  */
 public interface ViewAction {
 
@@ -27,4 +28,9 @@ public interface ViewAction {
 	void updatePasswordPrint();
 	void deleteSuccessPrint(String name);
 	void updateSuccessPrint(Profile profile);
+	void changeWeightPrint(Profile profile);
+	void unlockSuccessPrint(Profile profile);
+	void unlockMessagePrint();
+	
+
 }

@@ -6,12 +6,14 @@ import java.io.Serializable;
  * 프로필 DTO
  * @author 박재현
  * 2025-03-06
+ * 최종수정 2025-03-11
  */
 
 public class Profile implements Serializable{
 
 	private String name;  //동명이인이 있을 수 있으므로 조회를 위한 Key로 사용하기 부적합하다...
-	private String phone; //연락처가 없을 수도 있다...  역시 key로 사용하기 부적합하다...
+	private String phone; //연락처가 없을 수도 있다...  역시 key로 사용하기 부적합하다... Phone을 만들어뒀는데 결국 안 썼다
+
 	
 	//동명이인 처리를 어떻게 할지 고민이 되는데, 예시 스크린샷대로 구성하면 무슨 짓을 해도 동명이인 처리가 깔끕하게 안 된다
 	//name과 phone을 묶어서 검사하면 좀 나아지지만 근본적 해결방법이 되진 않는다. 폰이 없는 사람이 있을 수 있고, 010-000-0000처럼 대충 적어서 넣는 사람이 있을 수도 있다. 
@@ -96,6 +98,7 @@ public class Profile implements Serializable{
 	public Profile(){
 		super();
 		this.isAccountLock = false;
+		this.wrongPasswordCount=0;
 	}
 	
 	public Profile(String name, double weight, String password) {

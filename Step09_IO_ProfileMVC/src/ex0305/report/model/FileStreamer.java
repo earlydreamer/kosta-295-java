@@ -11,7 +11,6 @@ import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-import ex0305.report.exception.EmptyFileException;
 import ex0305.report.exception.FileIoFailException;
 
 public class FileStreamer implements FileStreamAction {
@@ -25,16 +24,27 @@ public class FileStreamer implements FileStreamAction {
 	
 	ArrayList<Profile> profileList;
 	
+	//TODO : Exception 난잡하게 throw하고 있는 것 전부 정리하기... 내부에서 자르고 println으로 찍어서 소화하거나 한단계 추상화된 상위 Exception을 만들어서 상위 Exception을 던지자
+
+	//순전히 View를 통한 예외 텍스트 출력을 태우기 위해 컨트롤러까지 보내고 있는데 이러면 중간에 거치는 모든 메소드에 주렁주렁 예외가 달린다 이게 가독성을 엄청 해치고 있다.
+	//모델은 뷰를 몰라야 하는 게 맞지만 예외 텍스트 띄우겠다고 Exception을 컨트롤러까지 태우면 역으로 의존성이 발생해버린다.
+	//나중에 DB로 교체하면 파일 관련 Exception을 사용하지 않게 되는데, DAO를 교체해도 덕지덕지 붙어서 수정이 발생한다. 
+	//FileIoFailException을 추상화한 상위 Exception을 만들고 상위 Exception을 던지는 방식으로 수정하면 상위 Exception을 받게 되므로 나중에 DB로 교체할 때 유연해질 것 같다...
+	
+
+	//생성자 주입을 통한 초기화
 	FileStreamer(){
 		filePath = BASE_PATH+BASE_FILE_NAME;
 		profileList = new ArrayList<Profile>();
 	}
-	
+
+	//생성자 주입을 통한 초기화
 	FileStreamer(String filename){
 		filePath = BASE_PATH+filename;
 		profileList = new ArrayList<Profile>();
 	}
-	
+
+	//생성자 주입을 통한 초기화
 	FileStreamer(String path, String filename){
 		filePath = path+filename;
 		profileList = new ArrayList<Profile>();
@@ -67,6 +77,7 @@ public class FileStreamer implements FileStreamAction {
 		}
 		return profile;
 	}
+
 	@Override
 	public void setOutputStream(Profile profile) throws IOException {
 		filePath = BASE_PATH + profile.getName().toString()+".txt";
@@ -98,7 +109,7 @@ public class FileStreamer implements FileStreamAction {
 		
 		File file = new File(filePath); 
 		if (file.exists()) {
-			System.out.println("초기화 중... 파일로부터 데이터를 읽어옵니다.");
+//			System.out.println("파일로부터 데이터를 읽어옵니다.");
 			try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath)))) {
 				profileList = ((ArrayList<Profile>) ois.readObject());
 				return profileList;

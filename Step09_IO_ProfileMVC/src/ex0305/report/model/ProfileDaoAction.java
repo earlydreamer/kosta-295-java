@@ -1,9 +1,6 @@
 package ex0305.report.model;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import ex0305.report.exception.FileIoFailException;
 import ex0305.report.exception.ProfileNotFoundException;
 
@@ -12,10 +9,18 @@ import ex0305.report.exception.ProfileNotFoundException;
  * CRUD 기능까지 수행하도록 인터페이스에 정의
  * @author 박재현
  * 2025-03-05
+ * 최종수정 2025-03-11
  */
 public interface ProfileDaoAction {
 	
-	void updateProfile(Profile profile);
+	/**
+	 * Key값(이름)이 일치하는 프로필을 찾아 전달받은 프로필로 대체
+	 * @param profile
+	 * @return 
+	 * @throws ProfileNotFoundException
+	 * @throws FileIoFailException 
+	 */
+	Profile updateProfile(Profile profile) throws ProfileNotFoundException, FileIoFailException;
 	
 	/**
 	 * 이름으로 프로필을 검색
@@ -46,6 +51,15 @@ public interface ProfileDaoAction {
 	 * @throws FileIoFailException 
 	 */
 	ArrayList<Profile>selectAllProfile() throws FileIoFailException;
+	
+	/**
+	 * 입력받은 프로필 정보와 일치하는 프로필을 삭제
+	 * @param Profile
+	 * @return
+	 * @throws FileIoFailException 
+	 * @throws ProfileNotFoundException 
+	 */
+	String DeleteProfile(Profile Profile) throws FileIoFailException, ProfileNotFoundException;
 	
 	
 }
