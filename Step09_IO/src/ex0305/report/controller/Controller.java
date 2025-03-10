@@ -3,8 +3,9 @@ package ex0305.report.controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import ex0305.report.exception.FileIoFailException;
 import ex0305.report.exception.ProfileNotFoundException;
-import ex0305.report.model.FileStreamer;
+import ex0305.report.model.ProfileDao;
 import ex0305.report.model.Profile;
 import ex0305.report.services.InputService;
 import ex0305.report.services.ProfileService;
@@ -12,19 +13,54 @@ import ex0305.report.view.View;
 
 /**
  * 컨트롤러 클래스
- * @author 박재현
- * 2025-03-06
+ * 
+ * @author 박재현 2025-03-06
  */
 //TODO : 추가된 메소드 Override해서 작성
 //TODO : 추가된 기능 메뉴 로직에 추가
 public class Controller implements ControllerAction {
 
-	View view = new View();
+	/*
+	 * ------------------- Member -----------------------
+	 */
 
-	FileStreamer stream = new FileStreamer();
-	InputService input = new InputService();
-	ProfileService profile = new ProfileService();
+	View view;
+	ProfileDao dao;
+	InputService input;
+	ProfileService profile;
 
+
+	/*
+	 * ------------------- Constructor -----------------------
+	 */
+
+	public Controller() {
+		init(); //테스트 용이성을 위해 생성자 안에 직접 초기화 로직을 넣는것보단 별도의 메소드로 분리하는 것이 낫다...
+		menuLogic();
+	}
+	
+	
+	/*
+	 * ------------------- Init Method -----------------------
+	 */
+
+	
+	public void init() {
+		try {
+			view= new View();
+			dao = new ProfileDao();
+			input = new InputService();
+			profile = new ProfileService(this.dao);
+		} catch (FileIoFailException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	/*
+	 * -------- Override Method -----------------------
+	 */
+
+	
 	@Override
 	public void menuLogic() {
 		// while loop를 돌면서 input을 대기하는 로직... 입력에 대한 응답의 주체가 Controller가 되도록
@@ -35,14 +71,14 @@ public class Controller implements ControllerAction {
 				view.mainPrint();
 				menuSelect = inputMenu();
 				switch (menuSelect) {
-//				case 1 -> stream.setOutputStream(newProfile()); //TODO : 변경된 CRUD 로직 타도록 변경, 메소드 분리해서 분리된 메소드 안에서 호출하고 해당 메소드에서 결과에 따른 성공 View 호출하도록
-				case 2 -> view.profilePrint(loadProfile()); //TODO : 메소드 분리해서 분리된 메소드 안에서 호출하도록
+				case 1 -> view.writeSuccessPrint(newProfile()); 
+				case 2 -> view.profilePrint(loadProfile()); 
 				case 3 -> isRunning = exit();
 				default -> wrongInput();
 				}
-			} catch (IOException e) {
-				//저장과 불러오기 양쪽에서 오는 IOException에 대응
-				System.out.println(e.getMessage());//예외 발생 메뉴 로직 루프 가장 바깥쪽에서 예외를 잡고 다시 루프를 돌린다
+			} catch (IOException | FileIoFailException e) {
+				// 저장과 불러오기 양쪽에서 오는 IOException에 대응
+				System.out.println(e.getMessage());// 예외 발생 메뉴 로직 루프 가장 바깥쪽에서 예외를 잡고 다시 루프를 돌린다
 			}
 		} while (isRunning);
 
@@ -59,12 +95,12 @@ public class Controller implements ControllerAction {
 	}
 
 	@Override
-	public Profile newProfile() {
+	public Profile newProfile() throws FileIoFailException {
 		// TODO : 예외처리
 		String name = inputName();
 		double weight = inputWeight();
 		String password = inputPassword();
-
+		
 		return profile.newProfile(name, weight, password);
 
 	}
@@ -98,10 +134,9 @@ public class Controller implements ControllerAction {
 		Profile returnProfile = null;
 		String inputString = inputName();
 		try {
-			returnProfile = stream.getFromInputStream(inputString);
-			
+			returnProfile = dao.getFromInputStream(inputString);
 		} catch (IOException e) {
-			throw e; //받은 예외를 그대로 다시 던진다
+			throw e; // 받은 예외를 그대로 다시 던진다
 		}
 		return returnProfile;
 
@@ -119,13 +154,6 @@ public class Controller implements ControllerAction {
 
 	}
 
-	/*
-	 * --------------------------------Constructor	 ----------------------------------
-	 */
-
-	public Controller() {
-		menuLogic();
-	}
 
 	@Override
 	public Profile searchWeight() {

@@ -23,5 +23,6 @@ public interface ViewAction {
 	void wrongPasswordPrint();
 	void checkPasswordPrint();
 	void changeWeightPrint();
+	void writeSuccessPrint(Profile Profile);
 	
 }
