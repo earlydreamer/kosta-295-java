@@ -8,7 +8,6 @@ import java.io.Serializable;
  * 2025-03-06
  */
 
-//TODO : Serializable 방식에 대응하도록 수정
 public class Profile implements Serializable{
 
 	private String name;  //동명이인이 있을 수 있으므로 조회를 위한 Key로 사용하기 부적합하다...
@@ -23,6 +22,8 @@ public class Profile implements Serializable{
 	private double weight;
 	private String password;
 	
+	private boolean isAccountLock; //비밀번호를 틀리면 계정이 잠겨야 한다...
+	private int wrongPasswordCount; //비밀번호를 틀린 횟수는 계정에 기록된다
 	
 	
 	/*
@@ -57,6 +58,22 @@ public class Profile implements Serializable{
 		this.password = password;
 	}
 	
+	public boolean isAccountLock() {
+		return isAccountLock;
+	}
+
+	public void setAccountLock(boolean isAccountLock) {
+		this.isAccountLock = isAccountLock;
+	}
+
+	public int getWrongPasswordCount() {
+		return wrongPasswordCount;
+	}
+	public void setWrongPasswordCount(int wrongPasswordCount) {
+		this.wrongPasswordCount = wrongPasswordCount;
+	}
+
+	
 	/*
 	 * -------------------------------- Override toString ----------------------------------
 	 */
@@ -77,19 +94,16 @@ public class Profile implements Serializable{
 	 */
 	
 	public Profile(){
-		
+		super();
+		this.isAccountLock = false;
 	}
 	
 	public Profile(String name, double weight, String password) {
-		super();
+		this();
 		this.name = name;
 		this.weight = weight;
 		this.password = password;
 	}
-	
-	
-	
-	
 	
 	
 }

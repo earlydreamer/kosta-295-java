@@ -4,11 +4,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ex0305.report.controller.io.InputHandler;
 import ex0305.report.exception.FileIoFailException;
 import ex0305.report.exception.ProfileNotFoundException;
+import ex0305.report.exception.WrongPasswordException;
 import ex0305.report.model.ProfileDao;
 import ex0305.report.model.Profile;
-import ex0305.report.services.InputService;
 import ex0305.report.services.ProfileService;
 import ex0305.report.view.View;
 
@@ -26,7 +27,7 @@ public class Controller implements ControllerAction {
 	 */
 
 	View view = null;
-	InputService input = null;
+	InputHandler input = null;
 	ProfileDao dao = null;
 	ProfileService profile = null;
 
@@ -48,7 +49,7 @@ public class Controller implements ControllerAction {
 	public void init() {
 		try {
 			this.view= new View();
-			this.input = new InputService();
+			this.input = new InputHandler();
 			this.dao = new ProfileDao();
 			this.profile = new ProfileService(this.dao);
 		} catch (FileIoFailException e) {
@@ -73,9 +74,14 @@ public class Controller implements ControllerAction {
 				menuSelect = inputMenu();
 				switch (menuSelect) {
 				case 1 -> view.writeSuccessPrint(newProfile()); 
-				case 2 -> view.profilePrint(loadProfile()); 
-				case 3 -> view.profilePrint(selectAllProfile());
+				case 2 -> view.profilePrint(searchProfileByName()); 
+				case 3 -> view.changeWeightPrint();
+				case 4 -> view.deleteSuccessPrint(deleteProfile());
+				case 5 -> view.profilePrint(searchByWeight());
+				case 6 -> view.updateSuccessPrint(updatePassword());
 				case 9 -> isRunning = exit();
+//				case 99 -> view.profilePrint(selectAllProfile()); //테스트용 임시 메소드. 요구되는 기능에는 없다
+
 				default -> wrongInput();
 				}
 			} catch (FileIoFailException e) {
@@ -83,7 +89,8 @@ public class Controller implements ControllerAction {
 				System.out.println(e.getMessage());// 예외 발생 메뉴 로직 루프 가장 바깥쪽에서 예외를 잡고 다시 루프를 돌린다
 			} catch (ProfileNotFoundException e) {
 				System.out.println(e.getMessage());
-			}
+			} catch (WrongPasswordException e) {
+				System.out.println(e.getMessage());}
 		} while (isRunning);
 
 	}
@@ -105,8 +112,7 @@ public class Controller implements ControllerAction {
 		double weight = inputWeight();
 		String password = inputPassword();
 		
-		return profile.newProfile(name, weight, password);
-
+		return profile.createProfile(name, weight, password);
 	}
 
 	@Override
@@ -134,15 +140,10 @@ public class Controller implements ControllerAction {
 	}
 	
 	@Override
-	public Profile loadProfile() throws FileIoFailException, ProfileNotFoundException {
+	public Profile searchProfileByName() throws FileIoFailException, ProfileNotFoundException {
 		Profile returnProfile = null;
 		String inputString = inputName();
-		try {
 			returnProfile = dao.searchProfileByName(inputString);
-			System.out.println(returnProfile.getName());
-		} catch (ProfileNotFoundException e) {
-			throw e; // 받은 예외를 그대로 다시 던진다
-		}
 		return returnProfile;
 
 	}
@@ -160,27 +161,58 @@ public class Controller implements ControllerAction {
 
 
 	@Override
-	public Profile searchWeight() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Profile> searchByWeight() throws ProfileNotFoundException {
+		ArrayList<Profile> returnProfile;
+		Double weight = input.inputDouble();
+		returnProfile = profile.searchProfileByWeight(weight);
+		return returnProfile;
+
 	}
 
 	@Override
 	public double updateWeight() {
-		// TODO Auto-generated method stub
+		// TODO 비즈니스 로직 연결
 		return 0;
 	}
 
 	@Override
-	public Profile updateProfile() {
-		// TODO Auto-generated method stub
-		return null;
+	public Profile updatePassword() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException {
+		view.checkPasswordPrint();
+		view.nameInputPrint();
+		String name = input.inputString();
+		view.passwordInputPrint();
+		String password = input.inputString();
+		return profile.checkPassword(name, password);
+		
+		
 	}
 
 
 	@Override
 	public ArrayList<Profile> selectAllProfile() throws FileIoFailException {
 		return profile.selectAllProfile();
+	}
+
+
+	@Override
+	public String deleteProfile() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException {
+		// TODO 비즈니스 로직 연결
+		view.nameInputPrint();
+		String name = input.inputString();
+		view.passwordInputPrint();
+		String password = input.inputString();
+		return profile.deleteProfile(name, password);
+	}
+
+
+	@Override
+	public Profile UpdatePassword(String name, String password) {
+		view.updatePasswordPrint();
+		view.nameInputPrint();
+		input.inputInt();
+		view.passwordInputPrint();
+		
+		return null;
 	}
 
 }

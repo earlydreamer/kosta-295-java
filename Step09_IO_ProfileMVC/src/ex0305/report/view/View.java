@@ -13,9 +13,9 @@ public class View implements ViewAction{
 
 	@Override
 	public void mainPrint() {
-		System.out.println("-----------------------------------------------------------------------------------");
-		System.out.println(" 1. 프로필 저장 | 2. 프로필 불러오기 | 4. 프로필 수정 | 5. 프로필 삭제 | 9. 종료 ");
-		System.out.println("-----------------------------------------------------------------------------------");
+		System.out.println("-------------------------------------------------------------------------------------------");
+		System.out.println(" 1. 프로필 저장 | 2. 이름 검색 | 3. 체중 변경 | 4. 프로필 삭제 | 5. 체중으로 검색 | 6. 비밀번호 변경| 9. 종료 ");
+		System.out.println("--------------------------------------------------------------------------------------------");
 	}
 
 	@Override
@@ -97,6 +97,24 @@ public class View implements ViewAction{
 	public void writeSuccessPrint(Profile profile) {
 		System.out.println(profile.getName()+"님의 프로필 저장에 성공했습니다.");
 	}
+
+	@Override
+	public void deleteSuccessPrint(String name) {
+		System.out.println(name+"님의 프로필을 삭제했습니다.");
+		
+	}
+
+	@Override
+	public void updatePasswordPrint() {
+		System.out.println("비밀번호를 변경합니다.");		
+	}
+
+	@Override
+	public void updateSuccessPrint(Profile profile) {
+		 System.out.println(profile.getName()+"님의 비밀번호 변경에 성공했습니다.");		
+	}
+	
+	
 	
 	
 	

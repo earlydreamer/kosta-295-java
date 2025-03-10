@@ -2,6 +2,7 @@ package ex0305.report.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import ex0305.report.exception.FileIoFailException;
 import ex0305.report.exception.ProfileNotFoundException;
@@ -21,6 +22,15 @@ public interface ProfileDaoAction {
 	 * @throws ProfileNotFoundException 
 	 */
 	Profile searchProfileByName(String name) throws ProfileNotFoundException;
+	
+	/**
+	 * 체중으로 프로필을 검색
+	 * @param weight
+	 * @return (ArrayList) 체중이 일치하는 프로필을 리턴
+	 * @throws ProfileNotFoundException 
+	 */
+	ArrayList<Profile> searchProfileByWeight(double weight) throws ProfileNotFoundException;
+	
 	
 	/**
 	 * 새 프로필 추가

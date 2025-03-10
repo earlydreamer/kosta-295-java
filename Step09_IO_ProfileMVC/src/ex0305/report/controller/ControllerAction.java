@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import ex0305.report.exception.FileIoFailException;
 import ex0305.report.exception.ProfileNotFoundException;
+import ex0305.report.exception.WrongPasswordException;
 import ex0305.report.model.Profile;
 
 /**
@@ -52,7 +53,7 @@ public interface ControllerAction {
 	 * @throws ProfileNotFoundException 
 	 * @throws FileIoFailException 
 	 */
-	Profile loadProfile() throws ProfileNotFoundException, FileIoFailException;
+	Profile searchProfileByName() throws ProfileNotFoundException, FileIoFailException;
 	/**
 	 * 종료 View를 호출하고 false를 반환하는 메소드
 	 * @return false
@@ -66,8 +67,9 @@ public interface ControllerAction {
 	/**
 	 * 입력한 사람의 몸무게를 검색해 리턴하는 메소드
 	 * @return
+	 * @throws ProfileNotFoundException 
 	 */
-	Profile searchWeight();
+	ArrayList<Profile> searchByWeight() throws ProfileNotFoundException;
 	
 	/**
 	 * 몸무게를 수정하는 메소드
@@ -75,12 +77,14 @@ public interface ControllerAction {
 	 */
 	double updateWeight();
 	
-	
 	/**
 	 * 프로필을 수정하는 메소드
 	 * @return (Profile) 프로필 DTO
+	 * @throws WrongPasswordException 
+	 * @throws ProfileNotFoundException 
+	 * @throws FileIoFailException 
 	 */
-	Profile updateProfile();
+	Profile updatePassword() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException;
 
 	/**
 	 * 전체 프로필을 리턴하는 메소드
@@ -88,5 +92,17 @@ public interface ControllerAction {
 	 * @throws FileIoFailException 
 	 */
 	ArrayList<Profile> selectAllProfile() throws FileIoFailException;
+	
+	/**
+	 * 프로필을 삭제하는 메소드
+	 * @return
+	 * @throws WrongPasswordException 
+	 * @throws ProfileNotFoundException 
+	 * @throws FileIoFailException 
+	 */
+	String deleteProfile() throws FileIoFailException, ProfileNotFoundException, WrongPasswordException;
+	
+	Profile UpdatePassword(String name, String password);
+	
 	
 }

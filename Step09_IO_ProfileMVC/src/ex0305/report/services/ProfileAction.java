@@ -1,6 +1,10 @@
 package ex0305.report.services;
 
+import java.util.ArrayList;
+
 import ex0305.report.exception.FileIoFailException;
+import ex0305.report.exception.ProfileNotFoundException;
+import ex0305.report.exception.WrongPasswordException;
 import ex0305.report.model.Profile;
 
 /**
@@ -21,8 +25,53 @@ public interface ProfileAction {
 	 * @throws FileIoFailException 
 	 */
 	
-	Profile newProfile(String name, double weight, String password) throws FileIoFailException;
+	Profile createProfile(String name, double weight, String password) throws FileIoFailException;
 	
+	/**
+	 * 해당 몸무게를 가진 Profile을 모두 검색
+	 * @param weight
+	 * @return
+	 */
+
+	
+	ArrayList<Profile> searchProfileByWeight(double weight);
+	
+	/**
+	 * 특정 프로필의 내용을 전달받은 객체대로 변경하는 메소드
+	 * @param profile
+	 * @return
+	 */
+	Profile updeateProfile(Profile profile);
+	
+	/**
+	 * 이름과 비밀번호를 입력받아 유효성 검사
+	 * @param name
+	 * @param password
+	 * @return 
+	 * @throws FileIoFailException 
+	 * @throws ProfileNotFoundException 
+	 * @throws WrongPasswordException 
+	 */
+	
+	Profile checkPassword(String name, String password) throws FileIoFailException, ProfileNotFoundException, WrongPasswordException;
+	
+	/**
+	 * 전체 프로필을 DAO에 요청 
+	 * @return
+	 * @throws FileIoFailException 
+	 */
+	ArrayList<Profile> selectAllProfile() throws FileIoFailException;
+	
+	/**
+	 * 프로필 삭제 비즈니스 로직
+	 * @param name
+	 * @param password
+	 * @return 
+	 * @throws WrongPasswordException 
+	 * @throws ProfileNotFoundException 
+	 * @throws FileIoFailException 
+	 */
+	String deleteProfile(String name, String password) throws FileIoFailException, ProfileNotFoundException, WrongPasswordException;
 	
 	
 }

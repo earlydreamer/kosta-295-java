@@ -1,4 +1,4 @@
-package ex0305.report.services;
+package ex0305.report.controller.io;
 
 /**
  * 입력과 관련된 기능을 정의한 인터페이스

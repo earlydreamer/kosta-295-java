@@ -23,6 +23,8 @@ public interface ViewAction {
 	void wrongPasswordPrint();
 	void checkPasswordPrint();
 	void changeWeightPrint();
-	void writeSuccessPrint(Profile Profile);
-	
+	void writeSuccessPrint(Profile profile);
+	void updatePasswordPrint();
+	void deleteSuccessPrint(String name);
+	void updateSuccessPrint(Profile profile);
 }
